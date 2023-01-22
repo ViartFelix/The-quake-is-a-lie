@@ -1,0 +1,6 @@
+name: TheQuakeIsALie
+version: '${project.version}'
+main: fr.felixviart.thequakeisalie.TheQuakeIsALie
+api-version: 1.15
+description: Le the quake is a lie d'AwildSalamiBar
+website: felix-viart.fr
