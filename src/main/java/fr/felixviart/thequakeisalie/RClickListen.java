@@ -3,10 +3,8 @@ package fr.felixviart.thequakeisalie;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
+import org.bukkit.Sound;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -26,10 +24,13 @@ public class RClickListen implements Listener {
             //player_coords retourne XYZ mais aussi les params "pitch" et "yaw", ça correspond à l'angle de vue. L'angle de vue est en deg.
             //Bukkit.broadcastMessage("Player @ "+player_coords);
 
-            Entity fired_projectile=player.getWorld().spawnEntity(player_coords.add(new Location(player.getWorld(),0,1.5,0)),EntityType.ARROW);
-            fired_projectile.setVelocity(player.getLocation().getDirection().multiply(3));
+            //Entity fired_projectile=player.getWorld().spawnEntity(player_coords.add(new Location(player.getWorld(),0,1.5,0)),EntityType.ARROW);
+            //fired_projectile.setVelocity(player.getLocation().getDirection().multiply(3));
 
-
+            Projectile projectile=player.launchProjectile(Arrow.class);
+            projectile.setVelocity(player.getLocation().getDirection().multiply(3));
+            projectile.setBounce(false);
+            player.playSound(player_coords, Sound.ENTITY_ARROW_SHOOT,0.5f,1f);
         }
     }
 }
