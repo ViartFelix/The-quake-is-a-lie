@@ -8,6 +8,7 @@ public final class TheQuakeIsALie extends JavaPlugin {
         // Plugin startup logic
         getLogger().info("onEnable is called!");
         getServer().getPluginManager().registerEvents(new RClickListen(), this);
+        getServer().getPluginManager().registerEvents(new ProjectileListener(), this);
     }
     @Override
     public void onDisable() {
