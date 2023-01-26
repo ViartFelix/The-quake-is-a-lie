@@ -1,6 +1,7 @@
 package fr.felixviart.thequakeisalie;
 
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
@@ -28,13 +29,11 @@ public class ProjectileListener implements Listener {
                 if(event.getHitEntity() != null) {
                     Entity shooter = (Entity) arrow.getShooter();
                     Player player = (Player) shooter;
-                    Location player_coords=player.getLocation();
 
                     //Si le joueur a une houe en fer dans la main
                     if(player.getInventory().getItemInMainHand().getType()==Material.IRON_HOE) {
                         player.playSound(player.getLocation(),Sound.ENTITY_ARROW_HIT_PLAYER,0.5f,1f);
 
-                        World world=player.getWorld();
                         Location arrow_loc=arrow.getLocation();
                         arrow.remove();
 
@@ -43,40 +42,41 @@ public class ProjectileListener implements Listener {
                         projectile.teleport(arrow_loc.add(arrow.getVelocity().normalize().multiply(3)));
 
                         /*
+                            @Source: https://www.spigotmc.org/threads/snowball-that-pass-through-person.35676/
+                         */
+
+                        /* Première soluce qui marche
                         world.spawnArrow(arrow.getLocation().add(arrow.getVelocity().normalize().multiply(2)),arrow.getVelocity(),2f,12f);
                         arrow.setShooter(player);
                         */
 
                     }
-                } else if (event.getHitEntity() == null) {
-                    Bukkit.broadcastMessage("Tentative traverser block");
-                        /*
-                        Location arrow_loc=arrow.getLocation();
+                } else if (event.getHitEntity() == null && global.isGhost) {
+                    Player shooter = (Player) arrow.getShooter();
+                    shooter.playSound(shooter.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,0.5f,0.5f);
 
-                        Double final_x=arrow_loc.getX();
-                        Double final_y;
-                        Double final_z=arrow_loc.getZ();
+                    Location arrow_loc=arrow.getLocation();
+                    Location shooter_locs=shooter.getLocation();
 
-                        BlockFace arrow_facing=arrow.getFacing();
+                    arrow.setGravity(false);
+                    arrow.remove();
 
-                        Location block_hit=arrow.getLocation().getBlock().getLocation();
+                    //Pour éviter que la flèche ne se téléporte constament quand elle tombe
+                    if(shooter_locs.getY()<arrow_loc.getY()+7) {
+                        Projectile projectile=shooter.launchProjectile(Arrow.class);
+                        projectile.setVelocity(arrow.getVelocity().normalize().multiply(3));
 
-                        switch (arrow_facing) {
-                            case EAST:
-                                final_x=arrow_loc.getX()+shooted.getBoundingBox().getWidthX()+0.25f;
-                                break;
-                            case WEST:
-                                final_x=arrow_loc.getX()-shooted.getBoundingBox().getWidthX()-0.25f;
-                                break;
-                            case NORTH:
-                                final_z=arrow_loc.getZ()-shooted.getBoundingBox().getWidthZ()-0.25f;
-                                break;
-                            case SOUTH:
-                                final_z=arrow_loc.getZ()+shooted.getBoundingBox().getWidthZ()+0.25f;
-                                break;
+                        double velo_multiplier = 1;
+                        double precision=0.1;
+                        Vector dir = arrow.getVelocity();
+
+                        //Tant que le prochian block n'est pas de l'air et si le prochain block n'est pas de l'air
+                        while (!arrow_loc.add(dir).getBlock().getType().equals(Material.AIR)) {
+                            velo_multiplier+=precision;
                         }
 
-                         */
+                        projectile.teleport(arrow_loc.add(arrow.getVelocity().normalize().multiply(velo_multiplier)));
+                    }
                 }
             }
         }
