@@ -1,6 +1,5 @@
 package fr.felixviart.thequakeisalie;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -10,10 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
-
 
 
 public class RClickListen implements Listener {
@@ -47,7 +43,7 @@ public class RClickListen implements Listener {
                     }
                     break;
                 case NETHER_STAR:
-                    player.openInventory(global.menu_gui);
+                    player.openInventory(global.main_menu);
             }
         }
     }

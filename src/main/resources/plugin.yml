@@ -4,3 +4,7 @@ main: fr.felixviart.thequakeisalie.TheQuakeIsALie
 api-version: 1.16
 description: Le the quake is a lie d'AwildSalamiBar
 website: felix-viart.fr
+commands:
+  quake:
+    description: "Commande pour modifier les paramètres du quake"
+    usage: /<quake>
