@@ -1,12 +1,14 @@
 package fr.felixviart.thequakeisalie;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
+import sun.java2d.pipe.SpanShapeRenderer;
 
 import java.util.Objects;
 
@@ -20,14 +22,14 @@ public class CustomCommands implements CommandExecutor {
             case "degats":
                 //Si l'argument de dégats est un nombre (merci regex)
                 if(args[1].matches("\\d+") && Integer.parseInt(args[1])!=0) {
-                    global.projectile_damage=Integer.parseInt(args[1]);
-                    Bukkit.broadcastMessage(ChatColor.GREEN+"Les dégats du projectiles sont maintenant: "+global.projectile_damage+" dmg");
+                    global.projectile_damage=(double)Integer.parseInt(args[1]);
+                    Bukkit.broadcastMessage(ChatColor.GREEN+"Le projectile fait désormais: "+global.projectile_damage+" dégats");
                 } else {
                     Bukkit.broadcastMessage(ChatColor.RED+"Argument non valide, veuillez entrer un nombre au-dessus de 0.");
                 }
                 break;
             case "rayon":
-                if(args[1].matches("\\d+") && Float.parseFloat(args[1])!=0) {
+                if(args[1].matches("^(\\d*\\.?\\d*)$") && Float.parseFloat(args[1])!=0) {
                     global.projectile_rayon=Math.round(Float.parseFloat(args[1])*100f)/100f;
                     //1 unité multiply(vecteur) ~33 blocks (1/4 de cercle)
                     Bukkit.broadcastMessage(ChatColor.GREEN+"Le rayon du cercle est maintenant de : "+global.projectile_rayon+" unités, soit ~"+global.projectile_rayon*33+" blocks (1/4 de cercle)");
@@ -38,20 +40,35 @@ public class CustomCommands implements CommandExecutor {
             case "proj":
             case "projectile":
                 Boolean isMatOk=false;
-                if(Material.matchMaterial(args[1])!=null) {
-                    for (Material mat_val:global.possible_projectiles) {
-                        if(Objects.equals(mat_val.toString(),args[1].toUpperCase())) {
-                            isMatOk=true;
-                            global.current_projecile=Material.valueOf(args[1].toUpperCase());
-                            Bukkit.broadcastMessage(ChatColor.GREEN+"Projectile changé en "+global.current_projecile);
-                        }
-                    }
+                for (String mat_val:global.possible_projectiles) {
+                    String target_proj=args[1].toUpperCase().toLowerCase();
 
-                    if(!isMatOk) {
-                        Bukkit.broadcastMessage(ChatColor.RED+"Le projectile entré n'est pas dans la liste des projectiles disponibles (ARROW,EGG,SNOWBALL,ENDER_PEARL,ENDER_EYE).");
+                    if (mat_val.toLowerCase().equals(target_proj)) {
+                        switch (target_proj) {
+                            case "arrow":
+                                global.current_projectile=Arrow.class;
+                                break;
+                            case "snowball":
+                                global.current_projectile=Snowball.class;
+                                break;
+                            case "egg":
+                                global.current_projectile=Egg.class;
+                                break;
+                            case "ender_pearl":
+                                global.current_projectile=EnderPearl.class;
+                                break;
+                            case "fireball":
+                                global.current_projectile=Fireball.class;
+                                break;
+                            default:
+                                Bukkit.broadcastMessage(ChatColor.RED+"Projectile non trouvé");
+                                break;
+                        }
+                        isMatOk = true;
                     }
-                } else {
-                    Bukkit.broadcastMessage(ChatColor.RED+"Le projectile entré n'a pas été trouvé, veuillez réessayer.");
+                }
+                if(!isMatOk) {
+                    Bukkit.broadcastMessage(ChatColor.RED+"Le projectile entré n'est pas dans la liste des projectiles disponibles (ARROW,EGG,SNOWBALL,ENDER_PEARL,FIREBALL).");
                 }
                 break;
             case "traj":

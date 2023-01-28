@@ -1,25 +1,27 @@
 package fr.felixviart.thequakeisalie;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Snowball;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class global {
     public static boolean isGhost=false;
-    public static Material current_projecile=Material.ARROW;
-    public static Integer projectile_damage=5;
+    //public static Material current_projectile=Material.ARROW;
+    public static Class current_projectile=Arrow.class;
+    public static Double projectile_damage=5.0;
     public static Float projectile_rayon=3f;
 
-    public static Material[] possible_projectiles = new Material[]{
-            Material.ARROW,
-            Material.SNOWBALL,
-            Material.EGG,
-            Material.ENDER_PEARL,
-            Material.ENDER_EYE,
+    public static String[] possible_projectiles = new String[]{
+            "ARROW",
+            "SNOWBALL",
+            "EGG",
+            "ENDER_PEARL",
+            "FIREBALL",
     };
     public static Inventory main_menu=Bukkit.createInventory(null,27,"Paramètres");
 

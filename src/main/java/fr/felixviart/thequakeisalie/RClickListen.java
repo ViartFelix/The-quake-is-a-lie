@@ -27,8 +27,8 @@ public class RClickListen implements Listener {
                     //Entity fired_projectile=player.getWorld().spawnEntity(player_coords.add(new Location(player.getWorld(),0,1.5,0)),EntityType.ARROW);
                     //fired_projectile.setVelocity(player.getLocation().getDirection().multiply(3));
 
-                    Projectile projectile=player.launchProjectile(Arrow.class);
-                    projectile.setVelocity(player.getLocation().getDirection().multiply(3));
+                    Projectile projectile=player.launchProjectile(global.current_projectile);
+                    projectile.setVelocity(player.getLocation().getDirection().multiply(global.projectile_rayon));
                     projectile.setBounce(false);
                     player.playSound(player_coords, Sound.ENTITY_ARROW_SHOOT,0.5f,1f);
                     break;
