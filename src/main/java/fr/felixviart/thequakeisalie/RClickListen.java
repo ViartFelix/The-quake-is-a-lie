@@ -1,8 +1,6 @@
 package fr.felixviart.thequakeisalie;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,6 +8,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 
 public class RClickListen implements Listener {
@@ -29,6 +28,11 @@ public class RClickListen implements Listener {
 
                     Projectile projectile=player.launchProjectile(global.current_projectile);
                     projectile.setVelocity(player.getLocation().getDirection().multiply(global.projectile_rayon));
+
+                    Vector decalageVect=new Vector(global.deca_X,global.deca_Y,global.deca_Z);
+                    Vector res_vect=global.rotateVectorY(decalageVect,player_coords.getYaw());
+                    projectile.teleport(player_coords.add(res_vect));
+
                     projectile.setBounce(false);
                     player.playSound(player_coords, Sound.ENTITY_ARROW_SHOOT,0.5f,1f);
                     break;

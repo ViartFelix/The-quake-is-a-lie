@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
 import sun.java2d.pipe.SpanShapeRenderer;
 
+import java.lang.reflect.Array;
 import java.util.Objects;
 
 public class CustomCommands implements CommandExecutor {
@@ -39,11 +40,8 @@ public class CustomCommands implements CommandExecutor {
                 break;
             case "proj":
             case "projectile":
-                Boolean isMatOk=false;
-                for (String mat_val:global.possible_projectiles) {
+                Boolean isMatOk=true;
                     String target_proj=args[1].toUpperCase().toLowerCase();
-
-                    if (mat_val.toLowerCase().equals(target_proj)) {
                         switch (target_proj) {
                             case "arrow":
                                 global.current_projectile=Arrow.class;
@@ -57,23 +55,44 @@ public class CustomCommands implements CommandExecutor {
                             case "ender_pearl":
                                 global.current_projectile=EnderPearl.class;
                                 break;
-                            case "fireball":
-                                global.current_projectile=Fireball.class;
+                            case "shulkerbullet":
+                                global.current_projectile=ShulkerBullet.class;
+                                break;
+                            case "spectralarrow":
+                                global.current_projectile=SpectralArrow.class;
+                                break;
+                            case "expbottle":
+                                global.current_projectile=ThrownExpBottle.class;
+                                break;
+                            case "potion":
+                                global.current_projectile=ThrownPotion.class;
+                                break;
+                            case "trident":
+                                global.current_projectile=Trident.class;
                                 break;
                             default:
                                 Bukkit.broadcastMessage(ChatColor.RED+"Projectile non trouvé");
+                                isMatOk = false;
                                 break;
                         }
-                        isMatOk = true;
-                    }
-                }
                 if(!isMatOk) {
-                    Bukkit.broadcastMessage(ChatColor.RED+"Le projectile entré n'est pas dans la liste des projectiles disponibles (ARROW,EGG,SNOWBALL,ENDER_PEARL,FIREBALL).");
+                    Bukkit.broadcastMessage(ChatColor.RED+"Le projectile entré n'est pas dans la liste des projectiles disponibles.");
+                } else {
+                    Bukkit.broadcastMessage(ChatColor.GREEN+"Le projectile a été changé en "+global.current_projectile+".");
                 }
                 break;
             case "traj":
             case "trajectoire":
+                String[] convertis_array=args[1].replaceAll("\\[", "").replaceAll("]", "").split(",");
 
+                if(convertis_array.length!=3) {
+                    Bukkit.broadcastMessage(ChatColor.RED+"Veuillez mettre 3 arguments pour le décalage, "+convertis_array.length+" trouvés");
+                } else {
+                    global.deca_X=Double.valueOf(convertis_array[0]);
+                    global.deca_Y=Double.valueOf(convertis_array[1]);
+                    global.deca_Z=Double.valueOf(convertis_array[2]);
+                    Bukkit.broadcastMessage(ChatColor.GREEN+"Le décalage du projectile est désormais de: X: "+global.deca_X+", Y: "+global.deca_Y+", Z; "+global.deca_Z);
+                }
                 break;
             default:
                 Bukkit.broadcastMessage(ChatColor.RED+"Argument non valide. Les arguments valables sont 'degats','rayon','projectile' et 'trajectoire'.");

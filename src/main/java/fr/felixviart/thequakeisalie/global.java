@@ -3,26 +3,49 @@ package fr.felixviart.thequakeisalie;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Egg;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Projectile;
-import org.bukkit.entity.Snowball;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
+
+import java.util.Objects;
 
 public class global {
     public static boolean isGhost=false;
     //public static Material current_projectile=Material.ARROW;
-    public static Class current_projectile=Arrow.class;
+    public static Class current_projectile=Egg.class;
+
+    public static Double deca_X=0.0;
+    public static Double deca_Y=1.0;
+    public static Double deca_Z=0.0;
+
+    /*
+    public static void checkGravity(String projectile) {
+        switch (projectile) {
+            case "dragonfireball":
+            case "fireball":
+            case "largefireball":
+            case "llamaspit":
+            case "shulkerbullet":
+            case "smallfireball":
+            case "witherskull":
+                needs_gravity=true;
+                break;
+            default:
+                needs_gravity=false;
+        }
+    }
+    public static Boolean needs_gravity=false;
+
+     */
+
     public static Double projectile_damage=5.0;
     public static Float projectile_rayon=3f;
 
-    public static String[] possible_projectiles = new String[]{
-            "ARROW",
-            "SNOWBALL",
-            "EGG",
-            "ENDER_PEARL",
-            "FIREBALL",
-    };
     public static Inventory main_menu=Bukkit.createInventory(null,27,"Paramètres");
 
     public static void setMainMenu() {
@@ -63,19 +86,24 @@ public class global {
         }
     }
 
-    /*
-    4 trucs changeables par les menus:
-        - Rayon du cercle (la force du du projectile)
-        - Le nombre de dégâts du projectile
-        - Le type de projectile
-        - Direction et trajectoire du projectile
-     */
+    public static Vector rotateVectorY(Vector vector, double degrees) {
+        double rad = Math.toRadians(degrees);
 
-    /*
-    Faire le contenu des menus ici
-     */
+        double currentX = vector.getX();
+        double currentZ = vector.getZ();
 
-    /*
-    Faire une fonction setProjectile qui vas set le projectile
-     */
+        double cosine = Math.cos(rad);
+        double sine = Math.sin(rad);
+
+        return new Vector((cosine * currentX - sine * currentZ), vector.getY(), (sine * currentX + cosine * currentZ));
+    }
+
+    public static void AddPasengerSafe(Projectile target,Entity passenger) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                target.addPassenger(passenger);
+            }
+        }.runTaskLater(Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("TheQuakeIsALie")), 150);
+    }
 }
