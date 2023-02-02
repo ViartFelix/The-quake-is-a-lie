@@ -8,8 +8,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
-import sun.java2d.pipe.SpanShapeRenderer;
-
 import java.lang.reflect.Array;
 import java.util.Objects;
 
@@ -31,7 +29,7 @@ public class CustomCommands implements CommandExecutor {
                 break;
             case "rayon":
                 if(args[1].matches("^(\\d*\\.?\\d*)$") && Float.parseFloat(args[1])!=0) {
-                    global.projectile_rayon=Math.round(Float.parseFloat(args[1])*100f)/100f;
+                    global.projectile_rayon=Math.round(Integer.parseInt(args[1])*10f)/10f;
                     //1 unité multiply(vecteur) ~33 blocks (1/4 de cercle)
                     Bukkit.broadcastMessage(ChatColor.GREEN+"Le rayon du cercle est maintenant de : "+global.projectile_rayon+" unités, soit ~"+global.projectile_rayon*33+" blocks (1/4 de cercle)");
                 } else {
@@ -44,19 +42,19 @@ public class CustomCommands implements CommandExecutor {
                     String target_proj=args[1].toUpperCase().toLowerCase();
                         switch (target_proj) {
                             case "arrow":
-                                global.current_projectile=Arrow.class;
+                                global.current_projectile=Arrow.class; //
                                 break;
                             case "snowball":
-                                global.current_projectile=Snowball.class;
+                                global.current_projectile=Snowball.class; //
                                 break;
                             case "egg":
-                                global.current_projectile=Egg.class;
+                                global.current_projectile=Egg.class; //
                                 break;
                             case "ender_pearl":
-                                global.current_projectile=EnderPearl.class;
+                                global.current_projectile=EnderPearl.class; //
                                 break;
                             case "shulkerbullet":
-                                global.current_projectile=ShulkerBullet.class;
+                                global.current_projectile=ShulkerBullet.class; //
                                 break;
                             case "spectralarrow":
                                 global.current_projectile=SpectralArrow.class;
@@ -68,7 +66,7 @@ public class CustomCommands implements CommandExecutor {
                                 global.current_projectile=ThrownPotion.class;
                                 break;
                             case "trident":
-                                global.current_projectile=Trident.class;
+                                global.current_projectile=Trident.class; //
                                 break;
                             default:
                                 Bukkit.broadcastMessage(ChatColor.RED+"Projectile non trouvé");

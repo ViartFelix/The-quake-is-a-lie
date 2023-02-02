@@ -7,7 +7,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
 
@@ -40,11 +42,23 @@ public class RClickListen implements Listener {
                 case SLIME_BALL:
                     global.isGhost=!global.isGhost;
 
+                    ItemStack target_item=null;
+                    ItemMeta item_data = null;
+
                     if(global.isGhost) {
-                        player.getInventory().setItemInMainHand(new ItemStack(Material.SLIME_BALL));
+                        target_item=new ItemStack(Material.SLIME_BALL);
+                        item_data=target_item.getItemMeta();
+                        item_data.setDisplayName(ChatColor.GREEN+"Mode fantôme actif");
+                        item_data.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
                     } else {
-                        player.getInventory().setItemInMainHand(new ItemStack(Material.MAGMA_CREAM));
+                        target_item=new ItemStack(Material.MAGMA_CREAM);
+                        item_data=target_item.getItemMeta();
+                        item_data.setDisplayName(ChatColor.RED+"Mode fantôme inactif");
+                        item_data.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
                     }
+
+                    target_item.setItemMeta(item_data);
+                    player.getInventory().setItemInMainHand(target_item);
                     break;
                 case NETHER_STAR:
                     player.openInventory(global.main_menu);
